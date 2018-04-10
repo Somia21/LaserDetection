@@ -31,8 +31,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     Mat mRgbaF;
     Mat mRgbaT;
 
-    Mat originalFrame;
-    Mat frame;
+
 
     //for HSV
     Mat frameH;
@@ -131,9 +130,12 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
         // Rotate mRgba 90 degrees
-        // Core.transpose(mRgba, mRgbaT); //Take Transpose Source, Destination
+       // Core.transpose(mRgba, mRgbaT); //Take Transpose Source, Destination
         //Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size());//for resizing
         //Core.flip(mRgbaF, mRgba, 1); //Flip 2D Matrix
+
+        Mat originalFrame=new Mat();
+        Mat frame=new Mat();
 
         inputFrame.rgba().copyTo(originalFrame);
         inputFrame.rgba().copyTo(frame);
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mChannels.clear();
         Core.split(frame, mChannels); // Split channels: 0-H, 1-S, 2-V
         frameH = mChannels.get(0);
-        //  frameS = mChannels.get(1);
+        frameS = mChannels.get(1);
         frameV = mChannels.get(2);
 
         // Apply a threshold to each component
@@ -157,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         frameH.release();
         frameV.release();
-        // frameS.release();
+        frameS.release();
+
         frame.release();
 
         return originalFrame; // This function must return
